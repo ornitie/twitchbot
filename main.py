@@ -1,29 +1,29 @@
-import socketserver
+from dotenv import load_dotenv #import environment lib
+load_dotenv()
+import os
 
-class MyTCPHandler(socketserver.BaseRequestHandler):
-    """
-    The RequestHandler class for our server.
+from twitchio.ext import commands
 
-    It is instantiated once per connection to the server, and must
-    override the handle() method to implement communication to the
-    client.
-    """
+class Bot(commands.Bot):
 
-    def handle(self):
-        # self.request is the TCP socket connected to the client
-        self.data = self.request.recv(1024).strip()
-        print("{} wrote:".format(self.client_address[0]))
-        print(self.data)
-        # just send back the same data, but upper-cased
-        self.request.sendall(self.data.upper())
+    def __init__(self):
+        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
+        super().__init__(token= os.environ['OAUTH'], prefix='!', initial_channels=['ornitie'])
 
-if __name__ == "__main__":
-    HOST, PORT = "localhost", 443
+    async def event_ready(self):
+        # We are logged in and ready to chat and use commands...
+        print(f'Logged in as | {self.nick}')
 
-    # Create the server, binding to localhost on port 9999
-    server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)
+    """ async def event_message(self, message):
+        print(message.content)
+        await self.handle_commands(message) """
 
-    # Activate the server; this will keep running until you
-    # interrupt the program with Ctrl-C
-    print("running...")
-    server.serve_forever()
+    @commands.command(name='hello')
+    async def hello(self, ctx: commands.Context):
+        # Send a hello back!
+        print("hellooo")
+        await ctx.send(f'Hello {ctx.author.name}!')
+
+
+bot = Bot()
+bot.run()
