@@ -30,4 +30,8 @@ token = os.environ['SPOTIFY_TOKEN']
 current_url = 'https://api.spotify.com/v1/me/player/currently-playing'
 headers = {"Authorization": f'Bearer {token}'}
 r = req.get(current_url, headers=headers)
-print(r.json()['item']['name'])
+song_name = r.json()['item']['name']
+song_authors = [author['name'] for author in r.json()['item']['artists']]
+
+print(f'{", ".join(song_authors)} - {song_name}')
+
