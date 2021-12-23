@@ -1,9 +1,8 @@
-from dotenv import load_dotenv
-import os
-from twitchio.ext import commands
-
+from dotenv import load_dotenv #import environment lib
 load_dotenv()
+import os
 
+from twitchio.ext import commands
 
 class Bot(commands.Bot):
 
@@ -31,7 +30,6 @@ class Bot(commands.Bot):
 
         print("Someone asked...")
         await ctx.send(f'Hello {ctx.author.name}! Right now I\'m just snooping the Twitch API using twitchio')
-
 
 bot = Bot()
 bot.run()
