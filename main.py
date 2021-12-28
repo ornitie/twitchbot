@@ -1,8 +1,10 @@
-from dotenv import load_dotenv #import environment lib
-load_dotenv()
+from dotenv import load_dotenv
 import os
-
 from twitchio.ext import commands
+
+from requestor import Requestor
+
+load_dotenv()
 
 class Bot(commands.Bot):
 
@@ -22,14 +24,25 @@ class Bot(commands.Bot):
     @commands.command(name='hello')
     async def hello(self, ctx: commands.Context):
         print("hellooo")
-        await ctx.send(f'Hello {ctx.author.name}!')
+        await ctx.send(f'Hello @{ctx.author.name}!')
 
     @commands.command(name='what')
     async def hello(self, ctx: commands.Context):
-        """ Create a command as a response to the question fo what we're doing rn """
+        """ Create a command as a response to the question for what we're doing rn """
 
         print("Someone asked...")
-        await ctx.send(f'Hello {ctx.author.name}! Right now I\'m just snooping the Twitch API using twitchio')
+        await ctx.send(f'@{ctx.author.name} Right now I\'m just checking the Twitch API using twitchio to create a bot, and also the Spotify API')
 
-bot = Bot()
-bot.run()
+    @commands.command(name='song')
+    async def hello(self, ctx: commands.Context):
+        print("someone is asking for the song")
+        requestor = Requestor()
+        song = await requestor.request()
+        print(song)
+        await ctx.send(f'@{ctx.author.name} {song}')
+        
+def main():
+    bot = Bot()
+    bot.run()
+
+main()
