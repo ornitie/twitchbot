@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-
+os.system('cmd /c "notepad"') 
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
 sys.path.append('../')
-from obswebsocket import obsws, requests, events  # noqa: E402
+from obswebsocket import obsws, requests, events
 
 host = "localhost"
 port = 4444
@@ -19,12 +19,33 @@ password = os.environ['OBS_PASSWORD']
 ws = obsws(host, port, password)
 ws.connect()
 
+def change_to_scene(scene_name):
+    try:
+        scenes = ws.call(requests.GetSceneList())
+        scene_names = [s['name'] for s in scenes]
+
+        for s in scenes.getScenes():
+            name = s['name']
+            if name == scene_name:
+                print(u"Switching to {}".format(name))
+                ws.call(requests.SetCurrentScene(name))
+                return
+            #time.sleep(2)
+
+        print("scene not found")
+        #TODO: return error
+
+    except KeyboardInterrupt:
+        pass
+
 try:
     scenes = ws.call(requests.GetSceneList())
+    outputs = ws.call(requests.GetSourcesList())
+    print(outputs)
     for s in scenes.getScenes():
         name = s['name']
         print(u"Switching to {}".format(name))
-        ws.call(requests.SetCurrentScene(name))
+        #ws.call(requests.SetCurrentScene(name))
         time.sleep(2)
 
     print("End of list")
