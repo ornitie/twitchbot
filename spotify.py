@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import base64
 
 API_TOKEN_URL = "https://accounts.spotify.com/api/token"
+CURRENT_SONG_URL = "https://api.spotify.com/v1/me/player/currently-playing"
 
 class Spotify():
 
@@ -38,21 +39,18 @@ class Spotify():
 
         try:
             token = self._token
-            current_url = 'https://api.spotify.com/v1/me/player/currently-playing'
             headers = {"Authorization": f'Bearer {token}'}
-            r = self._requestor.simple_get(current_url, headers=headers)
-            
+            r = self._requestor.simple_get(CURRENT_SONG_URL, headers=headers)
+
+            if r.status_code != 200:
+                token = self._get_new_token()
+                self._token = token
+                r = self._requestor.simple_get(CURRENT_SONG_URL, headers=headers)
+
             song_name = r.json()['item']['name']
             song_authors = [author['name'] for author in r.json()['item']['artists']]
             song = f'{", ".join(song_authors)} - {song_name}'
-            
+
             return song
         except:
-            return "Error"
-    
-
-    #asyncio.run(get_new_token())
-
-s = Spotify()
-song = s.get_current_song()
-print(song)
+            return "Unhandled Error"
