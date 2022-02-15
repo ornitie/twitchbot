@@ -1,5 +1,6 @@
 from flask import Flask
 from bot import Bot
+import threading
 from dotenv import load_dotenv
 from spotify import Spotify
 
@@ -22,4 +23,11 @@ def main():
     bot = Bot(spotify_client)
     bot.run()
 
-main()
+def start():
+    app.run(port=5000, host='0.0.0.0', debug=False, use_reloader=False)
+
+if __name__ == "__main__":
+    load_dotenv()
+    threading.Thread(target = start, args = (), daemon=True).start()
+    print("started server...")
+    main()

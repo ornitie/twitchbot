@@ -1,7 +1,5 @@
 from requestor import Requestor
-import asyncio
 import os
-from dotenv import load_dotenv
 import base64
 
 API_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -10,7 +8,6 @@ CURRENT_SONG_URL = "https://api.spotify.com/v1/me/player/currently-playing"
 class Spotify():
 
     def __init__(self):
-        load_dotenv()
         self._refresh_token = os.environ['SPOTIFY_REFRESH_TOKEN']
         self._client_id = os.environ['SPOTIFY_CLIENT_ID']
         self._client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
