@@ -4,6 +4,7 @@ import threading
 from dotenv import load_dotenv
 from spotify import Spotify
 from obs import OBS
+import commands.windows
 
 app = Flask(__name__)
 
@@ -33,5 +34,6 @@ def start_server():
 if __name__ == "__main__":
     load_dotenv()
     threading.Thread(target=start_server, args=(), daemon=True).start()
+    threading.Thread(target=commands.windows.start, args=(), daemon=True).start()
     print("started server...")
     main()
