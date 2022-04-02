@@ -5,6 +5,7 @@ sys.path.append("../")
 os.system('cmd /c "notepad"')
 """
 
+from email.mime import application
 import psutil
 import win32process
 from win32api import Beep, GetCursorPos, SetCursorPos, MessageBox
@@ -13,19 +14,25 @@ import win32gui
 import time
 from obs import OBS
 
+applications = {"Code.exe": "Editor Front", "msedge.exe": "Main"}
+
 
 class Windows:
     def __init__(self, obs_client):
         self.obs_client = obs_client
 
     def get_current_process_name(self):
-        hwnd = win32gui.GetForegroundWindow()
-        _, pid = win32process.GetWindowThreadProcessId(hwnd)
+        try:
+            hwnd = win32gui.GetForegroundWindow()
+            _, pid = win32process.GetWindowThreadProcessId(hwnd)
 
-        process = psutil.Process(pid)
-        process_name = process.name()
+            process = psutil.Process(pid)
+            process_name = process.name()
+            return process_name
 
-        return process_name
+        except Exception as e:
+            print(e)
+            return ""
 
     def __beep(self):
         Beep(200, 2000)
@@ -55,7 +62,11 @@ if __name__ == "__main__":
     while True:
         try:
             process_name = windows_command.get_current_process_name()
-            print(process_name)
-            time.sleep(0.5)
+            if process_name in applications:
+                next_scene = applications[process_name]
+                if next_scene != obs_client.get_current_scene():
+                    obs_client.change_to_scene(next_scene)
+            # print(process_name)
+            time.sleep(0.2)
         except KeyboardInterrupt:
             break
