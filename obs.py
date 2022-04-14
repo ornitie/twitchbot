@@ -18,6 +18,10 @@ class OBS:
         ws.connect()
 
         self.ws = ws
+        self.__current_scene = None
+
+    def get_current_scene(self):
+        return self.__current_scene
 
     def test(self):
         try:
@@ -50,13 +54,14 @@ class OBS:
     def change_to_scene(self, scene_name):
         try:
             scenes = self.ws.call(requests.GetSceneList())
-            scene_names = [s["name"] for s in scenes]
+            # scene_names = [s["name"] for s in scenes]
 
             for s in scenes.getScenes():
                 name = s["name"]
                 if name == scene_name:
                     print("Switching to {}".format(name))
                     self.ws.call(requests.SetCurrentScene(name))
+                    self.__current_scene = scene_name
                     return
                 # time.sleep(2)
 
