@@ -54,9 +54,7 @@ class Windows:
         SetCursorPos((pos[0] + 100, pos[1] + 100))
 
 
-def start():
-    obs_client = OBS()
-    current_window = win32gui.GetForegroundWindow()
+def start(obs_client):
     windows_command = Windows(obs_client)
     MessageBox(0, "Listo.", "Ejemplo Windows API", MB_OK)
     while True:

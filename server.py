@@ -19,8 +19,7 @@ def json_hello():
     return {"name": "ornitie", "message": "Hello, World!"}
 
 
-def main():
-    obs_client = OBS()
+def main(obs_client):
     spotify_client = Spotify()
     load_dotenv()
     bot = Bot(spotify_client, obs_client)
@@ -33,7 +32,10 @@ def start_server():
 
 if __name__ == "__main__":
     load_dotenv()
+    obs_client = OBS()
     threading.Thread(target=start_server, args=(), daemon=True).start()
-    threading.Thread(target=commands.windows.start, args=(), daemon=True).start()
+    threading.Thread(
+        target=commands.windows.start, args=([obs_client]), daemon=True
+    ).start()
     print("started server...")
-    main()
+    main(obs_client)
