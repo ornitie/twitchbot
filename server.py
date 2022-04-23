@@ -1,22 +1,16 @@
+import threading
+import commands.windows
+
 from flask import Flask
 from bot import Bot
-import threading
 from dotenv import load_dotenv
 from spotify import Spotify
 from obs import OBS
-import commands.windows
+from router import router
 
 app = Flask(__name__)
 
-
-@app.route("/")
-def hello_world():
-    return "Hello, Twitch, I'm a flask server!"
-
-
-@app.route("/json")
-def json_hello():
-    return {"name": "ornitie", "message": "Hello, World!"}
+app.register_blueprint(router)
 
 
 def main(obs_client):
