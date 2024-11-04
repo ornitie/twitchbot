@@ -37,7 +37,7 @@ class Bot(commands.Bot):
 
         print("Someone asked...")
         await ctx.send(
-            f"@{ctx.author.name} Working on an awful twitchbot, creating some server to centralize most things created"
+            f"@{ctx.author.name} Working on a spaced repetition web app"
         )
 
     @commands.command(name="song")
