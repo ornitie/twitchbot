@@ -49,5 +49,5 @@ class Spotify:
             song = f'{", ".join(song_authors)} - {song_name}'
 
             return song
-        except:
-            return "Unhandled Error"
+        except Exception as e:
+            return "Unhandled Error" + str(e)
